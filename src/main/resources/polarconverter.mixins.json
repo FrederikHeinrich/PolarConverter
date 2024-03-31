@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.frederikheinrich.polarconverter.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "EditWorldScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

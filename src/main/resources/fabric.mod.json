@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "polarconverter",
+  "version": "${version}",
+  "name": "PolarConverter",
+  "description": "",
+  "authors": [
+    {
+      "name": "Freddi",
+      "contact": {
+        "url": "https://github.com/FrederikHeinrich/PolarConverter",
+        "discord": "Freddi"
+      }
+    }
+  ],
+  "contact": {
+    "repo": "https://github.com/FrederikHeinrich/PolarConverter"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/polarconverter/icon.png",
+  "environment": "client",
+  "mixins": [
+    {
+      "config": "polarconverter.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
