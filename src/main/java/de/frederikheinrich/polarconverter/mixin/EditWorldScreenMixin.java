@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.world.level.storage.LevelStorage;
+import net.minestom.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,39 +49,41 @@ public class EditWorldScreenMixin extends Screen {
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/DirectionalLayoutWidget;add(Lnet/minecraft/client/gui/widget/Widget;)Lnet/minecraft/client/gui/widget/Widget;", ordinal = 9))
     private void addConvertToPolarButton(MinecraftClient client, LevelStorage.Session session, String levelName, BooleanConsumer callback, CallbackInfo ci){
         layout.add(ButtonWidget.builder(Text.literal("Convert to Polar"), button -> {
+            button.setMessage(Text.literal("Processing..."));
+            button.active = false;
             new Thread(()-> {
-                convertToPolar(session.getDirectory().path(), Path.of(session.getDirectory().path().toString(), session.getDirectoryName()+".polar")).thenAccept((success) -> {
-                    if(success){
-                        MinecraftClient.getInstance().submit(() -> MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.WORLD_BACKUP, Text.of("Polar Converter Finished!!"), Text.of("World Folder Opened..."))));
-                    }else{
-                        MinecraftClient.getInstance().submit(() -> MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.WORLD_BACKUP, Text.of("Polar Converter FAILED!!"), Text.of("please check console."))));
 
-                    }
-                });
-                Util.getOperatingSystem().open(session.getDirectory(WorldSavePath.ROOT).toFile());
+                MinecraftServer.init();
+                if(convertToPolar(session.getDirectory().path(), Path.of(session.getDirectory().path().toString(), session.getDirectoryName()+".polar"))){
+                    MinecraftClient.getInstance().submit(() -> MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.WORLD_BACKUP, Text.of("Polar Converter Finished!!"), Text.of("World Folder Opened..."))));
+                    Util.getOperatingSystem().open(session.getDirectory(WorldSavePath.ROOT).toFile());
+                }else{
+                    MinecraftClient.getInstance().submit(() -> MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.WORLD_BACKUP, Text.of("Polar Converter FAILED!!"), Text.of("please check console."))));
+                }
+                MinecraftServer.stopCleanly();
+                button.setMessage(Text.literal("Convert to Polar"));
+                button.active = true;
             }).start();
         }).width(200).build());
 
     }
 
     @Unique
-    public CompletableFuture<Boolean> convertToPolar(Path anvilPath, Path outputPath) {
-        return CompletableFuture.supplyAsync(() -> {
-            PolarWorld polarWorld;
-            try {
-                polarWorld = AnvilPolar.anvilToPolar(anvilPath, ChunkSelector.all());
-            } catch (IOException e) {
-                LOGGER.warn("Fail to read world", e);
-                return false;
-            }
-            var result = PolarWriter.write(polarWorld);
-            try {
-                Files.write(outputPath, result);
-                return true;
-            } catch (IOException e) {
-                LOGGER.warn("Fail to save world", e);
-                return false;
-            }
-        });
+    public Boolean convertToPolar(Path anvilPath, Path outputPath) {
+        PolarWorld polarWorld;
+        try {
+            polarWorld = AnvilPolar.anvilToPolar(anvilPath, ChunkSelector.all());
+        } catch (IOException e) {
+            LOGGER.warn("Fail to read world", e);
+            return false;
+        }
+        var result = PolarWriter.write(polarWorld);
+        try {
+            Files.write(outputPath, result);
+            return true;
+        } catch (IOException e) {
+            LOGGER.warn("Fail to save world", e);
+            return false;
+        }
     }
 }
