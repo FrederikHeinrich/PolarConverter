@@ -5,7 +5,7 @@ plugins {
     id 'java-library'
     id 'fabric-loom' version '1.6-SNAPSHOT'
     id 'maven-publish'
-    id 'io.github.goooler.shadow' version '8.1.8'
+    id 'com.gradleup.shadow' version '8.3.1'
 }
 
 version = project.mod_version
@@ -25,10 +25,10 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    implementation 'net.minestom:minestom-snapshots:fda23e4ea1'
-    implementation 'dev.hollowcube:polar:1.11.0'
-    shadow 'net.minestom:minestom-snapshots:fda23e4ea1'
-    shadow 'dev.hollowcube:polar:1.11.0'
+    implementation 'net.minestom:minestom-snapshots:4305006e6b'
+    implementation 'dev.hollowcube:polar:1.11.2'
+    shadow 'net.minestom:minestom-snapshots:4305006e6b'
+    shadow 'dev.hollowcube:polar:1.11.2'
 }
 
 processResources {
@@ -38,7 +38,7 @@ processResources {
     filteringCharset "UTF-8"
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
-                "minecraft_version": project.minecraft_version,
+                "supported_minecraft_version": project.supported_minecraft_version,
                 "loader_version": project.loader_version
     }
 }
