@@ -6,15 +6,15 @@
   "description": "",
   "authors": [
     {
-      "name": "Freddi",
+      "name": "Uebliche",
       "contact": {
-        "url": "https://github.com/FrederikHeinrich/PolarConverter",
+        "url": "https://github.com/Uebliche/PolarConverter",
         "discord": "Freddi"
       }
     }
   ],
   "contact": {
-    "repo": "https://github.com/FrederikHeinrich/PolarConverter"
+    "repo": "https://github.com/Uebliche/PolarConverter"
   },
   "license": "All-Rights-Reserved",
   "icon": "assets/polarconverter/icon.png",

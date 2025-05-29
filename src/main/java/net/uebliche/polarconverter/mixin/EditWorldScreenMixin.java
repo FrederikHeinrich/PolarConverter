@@ -1,4 +1,4 @@
-package de.frederikheinrich.polarconverter.mixin;
+package net.uebliche.polarconverter.mixin;
 
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
@@ -29,7 +29,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.CompletableFuture;
 
 @Mixin(EditWorldScreen.class)
 public class EditWorldScreenMixin extends Screen {
